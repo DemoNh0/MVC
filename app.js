@@ -10,6 +10,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.json()); // Middleware para tratar os dados no formato JSON
 
+app.get('/update', ()=>{
+    res.sendFile(path.join(__dirname, 'public', 'update.html'));
+});
+
+app.get('/delete', ()=>{
+    res.sendFile(path.join(__dirname, 'public', 'delete.html'));
+});
+
+app.delete('/api/clientes/:id', clienteController.deleteClient);
+
+//ROTA PARA ATUALIZAR O CLIENTE
+app.put('/api/clientes/:id', clienteController.updateClient);
+
 app.get('/api/clientes', clienteController.getAllClients); // Rota para obter todos os clientes
 app.post('/api/clientes', clienteController.createNewClient); //Rota para adicionar um novo cliente
 

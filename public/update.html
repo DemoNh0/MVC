@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar Cliente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 600px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            margin-top: 20px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+
+    <h1>Atualizar Cliente</h1>
+    <form id="updateForm">
+        <label for="id">ID do Cliente:</label>
+        <input type="text" id="id" name="id">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+        <label for="cpf">CPF:</label>
+        <input type="text" id="cpf" name="cpf" required>
+        <button type="submit">Atualizar Cliente</button>
+    </form>
+
+    <div id="message" class="message"></div>
+    <script>
+       document.getElementById('updateForm')
+       .addEventListener('submit', async(event)=>{ 
+        event.preventDefault();
+
+        const id = document.getElementById('id').value;
+        console.log(id)
+
+        const nome = document.getElementById('nome').value;
+        const cpf = document.getElementById('cpf').value;
+
+        try {
+                const response = await fetch(`/api/clientes/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nome, cpf })
+                });
+
+
+                if (response.ok) {
+                    document.getElementById('message').textContent = 'Cliente atualizado com sucesso!';
+                    document.getElementById('message').style.color = 'green';
+                } else {
+                    const errorData = await response.json();
+                    document.getElementById('message').textContent = `Erro: ${errorData.error}`;
+                    document.getElementById('message').style.color = 'red';
+                }
+            } catch (error) {
+                document.getElementById('message').textContent = `Erro: ${error.message}`;
+                document.getElementById('message').style.color = 'red';
+            }
+        });
+
+    </script>
+
+
+</body>
+</html>
